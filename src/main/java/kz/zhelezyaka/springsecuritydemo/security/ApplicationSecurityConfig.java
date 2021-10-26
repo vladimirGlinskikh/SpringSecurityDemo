@@ -33,9 +33,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.name())
-                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.name())
-                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.name())
+                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
                 .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated()
@@ -49,21 +49,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails vladimirUser = User.builder()
                 .username("vladimir")
                 .password(passwordEncoder.encode("qwerty"))
-//                .roles(STUDENT.name())
                 .authorities(STUDENT.getGrantedAuthorities())
                 .build();
 
         UserDetails vladUser = User.builder()
                 .username("vlad")
                 .password(passwordEncoder.encode("vlad123"))
-//                .roles(ADMIN.name())
                 .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails nikolayUser = User.builder()
                 .username("nikolay")
                 .password(passwordEncoder.encode("nikolay123"))
-//                .roles(ADMINTRAINEE.name())
                 .authorities(ADMINTRAINEE.getGrantedAuthorities())
                 .build();
 
