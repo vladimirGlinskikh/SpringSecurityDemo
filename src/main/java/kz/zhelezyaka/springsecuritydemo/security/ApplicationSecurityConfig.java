@@ -1,6 +1,7 @@
 package kz.zhelezyaka.springsecuritydemo.security;
 
 import kz.zhelezyaka.springsecuritydemo.auth.ApplicationUserService;
+import kz.zhelezyaka.springsecuritydemo.jwt.JwtTokenVerifier;
 import kz.zhelezyaka.springsecuritydemo.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,30 +41,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
+                .addFilterAfter(new JwtTokenVerifier(), JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest()
                 .authenticated();
-//                .and()
-//                .formLogin()
-//                .loginPage("/login").permitAll()
-//                .defaultSuccessUrl("/courses", true)
-//                .passwordParameter("password")
-//                .usernameParameter("username")
-//                .and()
-//                .rememberMe()
-//                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
-//                .key("somethingverysecured")
-//                .rememberMeParameter("remember-me")
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-//                .clearAuthentication(true)
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID", "remember-me")
-//                .logoutSuccessUrl("/login");
     }
 
     @Override
